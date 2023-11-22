@@ -110,7 +110,6 @@ def user_verify_view(request):
             return redirect('/user_verify/')
     return render(request=request,template_name='user_verify.html')
 
-@login_required(login_url='/user_verify/')
 def otp_view(request):
     if request.method=='POST':
         otp=request.POST.get('OTP')
@@ -121,7 +120,6 @@ def otp_view(request):
     return render(request=request,template_name='otp.html')
 
 
-@login_required(login_url='/user_verify/')
 def change_password_view(request):
     if request.method=='POST':
         password=request.POST.get('password')

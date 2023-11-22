@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from todo_list.models import todo
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
@@ -13,6 +14,7 @@ def home_view(request):
         time1=request.POST.get('time1')
 
         user=todo.objects.create(
+            user=request.user,
             user_input=user_input,
             Date=Date,
             time1=time1,
@@ -20,11 +22,10 @@ def home_view(request):
 
         user.save()
 
-    tasks=todo.objects.all()
+    tasks=todo.objects.filter(user_id=request.user)
+    user_data = User.objects.get(id = request.user.id)
 
-
-
-    return render(request=request,template_name='home.html',context={'tasks':tasks})
+    return render(request=request,template_name='home.html',context={'tasks':tasks,'user_data':user_data})
 
 @login_required(login_url='/login/')
 def update_view(request,id):
