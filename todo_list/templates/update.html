@@ -1,0 +1,32 @@
+{% extends 'home.html' %}
+
+{% block strart1 %}        
+            <form action="" method="post" enctype="multipart/form-data" >
+                {% csrf_token %}
+            
+                <div class="container card-body shadow-lg p-3 mb-5  bg-body rounded  d-grid gap-3 	col-lg-6 col-xs-2 	" style="margin-top: 50px;">
+                    <center><h1 style="font-family: 'Times New Roman', Times, serif;">TODO LIST</h1></center>
+                  <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">TASK NAME</label>
+                    <textarea class="form-control p-2 bg-light border" rows="3" name="user_input" placeholder="example:wake_up,exercise" required>{{res.user_input}}</textarea>
+                  </div>
+                  <div class="mb-3 ">
+                    <label for="exampleFormControlInput1" class="form-label ">TASK DATE</label>
+                    <h6>YOUR HAVE ENTERED DATE IS : {{res.Date}}</h6>
+                    
+                    <input type="date" class="form-control p-2 bg-light border"  placeholder="DATE" name='Date' value="" required>
+                  </div>
+                  
+                  <div class="mb-3 ">
+                    <label for="exampleFormControlInput1" class="form-label ">TASK TIME</label>
+                    <h6>YOUR HAVE ENTERED DATE IS : {{res.time1}}</h6>
+
+                    <input type="time" class="form-control p-2 bg-light border"  placeholder="DATE" name='time1' value="" required>
+                  </div>
+                  
+                  
+            <input type="submit" class="btn btn-success btn-sm " role="button" aria-pressed="true" value="ADD">
+
+                </div>
+            </form>
+ {% endblock %}
