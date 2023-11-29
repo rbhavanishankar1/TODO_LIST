@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import *
@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import  settings
 from django.core.mail import send_mail
 import random
+from uuid import uuid4
 
 # Create your views here.
 
@@ -49,7 +50,7 @@ def register_view(request):
             user.set_password(password)
             user.save()
             messages.info(request,'Registration Sucess')
-
+            return redirect('/login/')
     return render(request=request,template_name='register.html',context={'Register':'register'})
 
 
@@ -84,7 +85,7 @@ def logout_view(request):
 
 generated_otp=None
 username1=None
-
+generated_token=None
 
 def user_verify_view(request):
     if request.method=='POST':
@@ -103,35 +104,41 @@ def user_verify_view(request):
                 recipient_list=[user]
 
             )
+            global generated_token
+            generated_token=uuid4()
 
-            return redirect('/otp/')
+
+            return redirect(f'/otp/{generated_token}')
         else:
             messages.info(request, "USERNAME DOESN'T EXITS")
-            return redirect('/user_verify/')
+            return redirect(f'/user_verif')
     return render(request=request,template_name='user_verify.html')
 
-def otp_view(request):
-    if request.method=='POST':
-        otp=request.POST.get('OTP')
-        if int(otp)==int(generated_otp):
-            return redirect('/change_password/')
-        else:
-            return redirect('/otp/')
+def otp_view(request,token):
+    if token==str(generated_token):
+
+        if request.method=='POST':
+            otp=request.POST.get('OTP')
+            if int(otp)==int(generated_otp):
+                return redirect(f'/change_password/{generated_token}')
+            else:
+                return HttpResponseRedirect(request.path_info)
     return render(request=request,template_name='otp.html')
 
 
-def change_password_view(request):
-    if request.method=='POST':
-        password=request.POST.get('password')
-        confirm_password=request.POST.get('confirm_password')
-        if password == confirm_password:
-            user =User.objects.get(username=username1)
-            user.password=password
-            user.set_password(password)
-            user.save()
-            return redirect('/login/')
-        else:
-            messages(request,'PASSWORD AND CONFIRM ESSAGE ARE NOT SAME')
-            return redirect('/change_password/')
+def change_password_view(request,token):
+    if token==str(generated_token):
+        if request.method=='POST':
+            password=request.POST.get('password')
+            confirm_password=request.POST.get('confirm_password')
+            if password == confirm_password:
+                user =User.objects.get(username=username1)
+                user.password=password
+                user.set_password(password)
+                user.save()
+                return redirect('/login/')
+            else:
+                messages(request,'PASSWORD AND CONFIRM ESSAGE ARE NOT SAME')
+                return HttpResponseRedirect(request.path_info)
     return render(request=request,template_name='change_password.html')
 
