@@ -25,7 +25,7 @@ def home_view(request):
     tasks=todo.objects.filter(user_id=request.user)
     user_data = User.objects.get(id = request.user.id)
 
-    return render(request=request,template_name='home.html',context={'tasks':tasks,'user_data':user_data})
+    return render(request=request,template_name='index.html',context={'tasks':tasks,'user_data':user_data})
 
 @login_required(login_url='/login/')
 def update_view(request,id):
