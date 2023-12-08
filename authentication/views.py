@@ -50,7 +50,7 @@ def register_view(request):
             user.set_password(password)
             user.save()
             messages.info(request,'Registration Sucess')
-            return redirect('/login/')
+            return redirect('/')
     return render(request=request,template_name='register.html',context={'Register':'register'})
 
 
@@ -64,13 +64,13 @@ def login_view(requset):
 
         if not User.objects.filter(username = username).exists():
             messages.info(requset,'INVALID USERNAME',extra_tags='danger')
-            return redirect('/login/')
+            return redirect('/')
         
         user=authenticate(username = username,password=password)
 
         if user is None:
             messages.info(requset,'INVALID PASSWORD',extra_tags='danger')
-            return redirect('/login/')
+            return redirect('/')
 
         else:
             login(requset,user)
@@ -80,7 +80,7 @@ def login_view(requset):
 
 def logout_view(request):
     logout(request)
-    return redirect('/login/')
+    return redirect('/')
 
 
 generated_otp=None
@@ -137,7 +137,7 @@ def change_password_view(request,token):
                 user.password=password
                 user.set_password(password)
                 user.save()
-                return redirect('/login/')
+                return redirect('/')
             else:
                 messages.info(request,'PASSWORD AND CONFIRM PASSWORD ARE NOT SAME')
                 return HttpResponseRedirect(request.path_info)

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-@login_required(login_url='/login/')
+@login_required
 def home_view(request):
 
     if request.method=='POST':
@@ -27,7 +27,7 @@ def home_view(request):
 
     return render(request=request,template_name='index.html',context={'tasks':tasks,'user_data':user_data})
 
-@login_required(login_url='/login/')
+@login_required
 def update_view(request,id):
     res=todo.objects.get(id=id)
     if request.method == 'POST':
@@ -44,7 +44,7 @@ def update_view(request,id):
 
 
 
-@login_required(login_url='/login/')
+@login_required
 def delete_view(requset,id):
     todo.objects.get(id=id).delete()
     return redirect('/home/')
