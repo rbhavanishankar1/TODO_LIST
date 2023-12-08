@@ -86,7 +86,7 @@ def logout_view(request):
 generated_otp=None
 username1=None
 generated_token=None
-
+user=None
 def user_verify_view(request):
     if request.method=='POST':
         global username1
@@ -95,11 +95,12 @@ def user_verify_view(request):
         if User.objects.filter(username=username1).exists():
             global generated_otp
             generated_otp=random.randint(1000,9999)
+            global user
             user=User.objects.get(username=username1).email
             
             send_mail(
-                subject='NO REPLY',
-                message=f'your otp is :{generated_otp}',
+                subject="DON'T REPLY IT IS COMPUTER GENERATED MESSAGE",
+                message=f'your required otp for reset password  is  :{generated_otp}',
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[user]
 
@@ -110,18 +111,18 @@ def user_verify_view(request):
 
             return redirect(f'/otp/{generated_token}')
         else:
-            messages.info(request, "USERNAME DOESN'T EXITS")
-            return redirect(f'/user_verif')
+            messages.info(request, "USER DOESN'T EXITS",extra_tags="danger")
+            return redirect('/user_verify')
     return render(request=request,template_name='user_verify.html')
 
 def otp_view(request,token):
     if token==str(generated_token):
-
         if request.method=='POST':
             otp=request.POST.get('OTP')
             if int(otp)==int(generated_otp):
                 return redirect(f'/change_password/{generated_token}')
             else:
+                messages.info(request,"INVALID OTP",extra_tags="danger")
                 return HttpResponseRedirect(request.path_info)
     return render(request=request,template_name='otp.html')
 
@@ -138,7 +139,7 @@ def change_password_view(request,token):
                 user.save()
                 return redirect('/login/')
             else:
-                messages(request,'PASSWORD AND CONFIRM ESSAGE ARE NOT SAME')
+                messages.info(request,'PASSWORD AND CONFIRM PASSWORD ARE NOT SAME')
                 return HttpResponseRedirect(request.path_info)
     return render(request=request,template_name='change_password.html')
 
