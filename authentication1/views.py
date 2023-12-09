@@ -2,9 +2,9 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import *
+from authentication1.models import register_model
 from django.contrib.auth import authenticate,login,logout
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
 from django.conf import  settings
 from django.core.mail import send_mail
 import random
