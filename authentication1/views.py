@@ -99,8 +99,9 @@ def user_verify_view(request):
             user=User.objects.get(username=username1).email
             
             send_mail(
-                subject="DON'T REPLY IT IS COMPUTER GENERATED MESSAGE",
-                message=f'your required otp for reset password  is  :{generated_otp}',
+                subject="DON'T REPLY ",
+                message= "  DON't REPLY TO THIS MESSGAE THIS IS SYSTEM GENERATED MESSAGE \n"
+                         f"your required otp for reset password  is  :{generated_otp}",
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[user]
 
@@ -118,11 +119,17 @@ def user_verify_view(request):
 def otp_view(request,token):
     if token==str(generated_token):
         if request.method=='POST':
-            otp=request.POST.get('OTP')
+            otp1=request.POST.get('otp1')
+            otp2=request.POST.get('otp2')
+            otp3=request.POST.get('otp3')
+            otp4=request.POST.get('otp4')
+            otp=int(otp1+otp2+otp3+otp4)
+            print(otp)
+            print(generated_otp,type(generated_otp))
             if int(otp)==int(generated_otp):
                 return redirect(f'/change_password/{generated_token}')
             else:
-                messages.info(request,"INVALID OTP",extra_tags="danger")
+                messages.info(request,"INVALID OTP")
                 return HttpResponseRedirect(request.path_info)
     return render(request=request,template_name='otp.html')
 
