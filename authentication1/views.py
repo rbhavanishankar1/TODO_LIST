@@ -100,7 +100,7 @@ def user_verify_view(request):
             
             send_mail(
                 subject="DON'T REPLY ",
-                message= "  DON't REPLY TO THIS MESSGAE THIS IS SYSTEM GENERATED MESSAGE \n"
+                message= "DON't REPLY TO THIS MESSGAE THIS IS SYSTEM GENERATED MESSAGE \n"
                          f"your required otp for reset password  is  :{generated_otp}",
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[user]
