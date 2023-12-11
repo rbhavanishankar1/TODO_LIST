@@ -13,9 +13,27 @@
         font-family: 'Times New Roman', Times, serif;
         font-weight: 100;
       }
-      
+    /* Remove number input arrows */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
     </style>
-    
+     <script>
+      function validateNumericInput(input) {
+        // Remove non-numeric characters
+        var sanitizedValue = input.value.replace(/[^0-9]/g, '');
+  
+        // Limit to 10 digits
+        sanitizedValue = sanitizedValue.substring(0, 10);
+  
+        // Update the input value
+        input.value = sanitizedValue;
+      }
+      
+    </script>
 </head>
 <body>
 
@@ -67,14 +85,14 @@
 
           <div class="mb-3 ">
             <label for="exampleFormControlInput1" class="form-label ">Phone</label>
-            <input type="number" class="form-control p-2 bg-light border"  placeholder="Phone" name="phone" value="" required>
+            <input type="number" class="form-control p-2 bg-light border"  placeholder="Phone" name="phone" oninput="validateNumericInput(this)" value="" required>
           </div>
 
           
           <div class="form-group mb-3">
             <label for="exampleFormControlInput1" class="form-label ">Gender</label>
             <select class="custom-select form-control p-2 bg-light border" name="gender" id="gender" required>
-              <option value="">-----------</option>
+              <option value="">------------</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>

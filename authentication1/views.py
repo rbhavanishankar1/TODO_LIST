@@ -123,7 +123,7 @@ def otp_view(request,token):
             otp2=request.POST.get('otp2')
             otp3=request.POST.get('otp3')
             otp4=request.POST.get('otp4')
-            otp=int(otp1+otp2+otp3+otp4)
+            otp=int(str(otp1)+str(otp2)+str(otp3)+str(otp4))
             print(otp)
             print(generated_otp,type(generated_otp))
             if int(otp)==int(generated_otp):
